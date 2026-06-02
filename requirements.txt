@@ -1,0 +1,5 @@
+opencv-python
+ultralytics
+pymongo[srv]
+PyJWT
+python-dotenv

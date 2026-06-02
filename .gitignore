@@ -1,0 +1,14 @@
+venv/
+node_modules/
+dist/
+build/
+.env
+*.pyc
+__pycache__/
+*.db
+*.sqlite
+*.log
+/.vscode/
+.DS_Store
+yolov8n.pt
+models/

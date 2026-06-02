@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRINAY — Sign In</title>
+  <meta name="description" content="Sign in to TRINAY for personalized AI vision assistance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body class="login-landing">
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <img src="logo trinay.png" alt="TRINAY Logo" class="logo-img" />
+        <span class="logo-text">TRINAY</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#hero">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="login.html">Sign In</a></li>
+        <li><a href="index.html#stats">Impact</a></li>
+        <li><a href="index.html#tech">Technology</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="detect.html" style="color:var(--lavender-lt);font-weight:700;">📷 Live Detection</a></li>
+      </ul>
+      <a href="login.html" class="nav-cta">Log In</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section id="hero" class="login-hero">
+    <div class="hero-content login-hero-content">
+      <div class="hero-badge">🔒 Secure Access</div>
+      <h1 class="hero-title">
+        <span class="gradient-text">Your AI Vision</span><br />
+        <em>Awaits You.</em>
+      </h1>
+      <p class="hero-subtitle">
+        Sign in to unlock personalized TRINAY features — from real-time object detection to safety alerts and scene
+        summaries tailored to you.
+      </p>
+      <ul class="login-benefits">
+        <li>
+          <span class="benefit-icon">👁️</span>
+          <span>Real-time AI-powered scene understanding</span>
+        </li>
+        <li>
+          <span class="benefit-icon">⚡</span>
+          <span>Instant fall and obstacle safety alerts</span>
+        </li>
+        <li>
+          <span class="benefit-icon">💱</span>
+          <span>Indian currency detection on demand</span>
+        </li>
+        <li>
+          <span class="benefit-icon">🔐</span>
+          <span>End-to-end secured vision insights</span>
+        </li>
+      </ul>
+      <div class="login-core">
+        <div class="core-orb"></div>
+        <div>
+          <div class="core-title">TRINAY Vision Core</div>
+          <div class="core-sub">Active · Secure · Intelligent</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="login-panel">
+      <div class="login-card">
+        <div class="login-tabs">
+          <button class="login-tab active" id="tabSignIn" type="button">Sign In</button>
+          <button class="login-tab" id="tabRegister" type="button">Create Account</button>
+        </div>
+        <div class="login-head">
+          <h2 id="formTitle">Welcome back</h2>
+          <p id="formSubtitle">Sign in to your TRINAY account</p>
+        </div>
+        <p id="msg" class="login-msg"></p>
+
+        <div class="login-field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="login-field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+          <a class="login-forgot" href="#" onclick="return false;">Forgot password?</a>
+        </div>
+
+        <button id="actionBtn" class="login-primary" type="button">Sign In →</button>
+
+        <div class="login-divider"><span>or continue with</span></div>
+        <button class="login-google" type="button" disabled>
+          <span class="google-dot">G</span>
+          Google
+        </button>
+      </div>
+    </aside>
+
+    <div class="scroll-hint">
+      <div class="scroll-dot"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="section-header">
+      <span class="section-tag">Core Capabilities</span>
+      <h2>Everything You <span class="gradient-text">Need to Navigate</span></h2>
+      <p>Six powerful AI modules working in harmony to build a complete assistive vision ecosystem.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card" data-tilt>
+        <div class="feat-icon">👁️</div>
+        <h3>Object Detection</h3>
+        <p>Real-time YOLOv8 and SSD detection of hundreds of everyday objects with bounding-box overlays and instant
+          audio feedback.</p>
+        <div class="feat-tag">YOLOv8 · SSD MobileNet</div>
+      </div>
+      <div class="feat-card featured" data-tilt>
+        <div class="feat-badge">Core</div>
+        <div class="feat-icon">📏</div>
+        <h3>Distance Estimation</h3>
+        <p>Focal-length face-distance calculation warns users when obstacles are dangerously close, triggering danger
+          alerts in real time.</p>
+        <div class="feat-tag">Sub-metre Precision</div>
+      </div>
+      <div class="feat-card" data-tilt>
+        <div class="feat-icon">💱</div>
+        <h3>Currency Detection</h3>
+        <p>ORB feature-matching identifies Indian Rupee denominations from camera input so users always know what note
+          they hold.</p>
+        <div class="feat-tag">Indian Rupee · ORB Matching</div>
+      </div>
+      <div class="feat-card" data-tilt>
+        <div class="feat-icon">📖</div>
+        <h3>OCR Text Reader</h3>
+        <p>Extracts printed text from signs, labels, and documents and reads it aloud — transforming any written surface
+          into spoken words.</p>
+        <div class="feat-tag">Tesseract · Live OCR</div>
+      </div>
+      <div class="feat-card" data-tilt>
+        <div class="feat-icon">🗺️</div>
+        <h3>Scene Summary</h3>
+        <p>Generates human-language descriptions of the surroundings and provides navigation hints so the user
+          understands their environment.</p>
+        <div class="feat-tag">NLP · Spatial Reasoning</div>
+      </div>
+      <div class="feat-card" data-tilt>
+        <div class="feat-icon">🚨</div>
+        <h3>Fall & Safety Alerts</h3>
+        <p>Dedicated fall-detection model paired with emergency alert workflows that can notify caregivers the moment a
+          risk event is identified.</p>
+        <div class="feat-tag">YOLOv8 · Emergency SOS</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="section-header">
+      <span class="section-tag">Process</span>
+      <h2>How <span class="gradient-text">TRINAY Works</span></h2>
+      <p>A seamless pipeline from camera input to spoken guidance — in milliseconds.</p>
+    </div>
+    <div class="how-timeline">
+      <div class="how-step" data-step="1">
+        <div class="step-icon-wrap">
+          <div class="step-icon">📷</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <h3>Capture</h3>
+          <p>The device camera streams live frames at 30 fps. The processing pipeline selects every Nth frame for
+            inference, ensuring smooth, lag-free operation.</p>
+        </div>
+      </div>
+      <div class="how-step" data-step="2">
+        <div class="step-icon-wrap">
+          <div class="step-icon">🧠</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <h3>Analyse</h3>
+          <p>YOLOv8 identifies objects, faces, and hazards. Parallel modules run OCR, currency matching, and fall
+            detection simultaneously.</p>
+        </div>
+      </div>
+      <div class="how-step" data-step="3">
+        <div class="step-icon-wrap">
+          <div class="step-icon">⚡</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <h3>Decide</h3>
+          <p>The alert engine evaluates detected objects, computes distances in inches/metres, and decides whether a
+            voice or vibration alert is required.</p>
+        </div>
+      </div>
+      <div class="how-step" data-step="4">
+        <div class="step-icon-wrap">
+          <div class="step-icon">🗣️</div>
+        </div>
+        <div class="step-body">
+          <h3>Speak</h3>
+          <p>Text-to-speech narrates the scene description, object identities, distances, and any safety warnings —
+            giving the user a rich, eyes-free experience.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:3.5rem;">
+      <p style="color:var(--muted);margin-bottom:1.4rem;font-size:1rem;">See the full pipeline in action — live on your
+        camera.</p>
+      <a href="detect.html" class="btn-primary"
+        style="display:inline-flex;align-items:center;gap:0.5rem;font-size:1.05rem;padding:1rem 2.4rem;">
+        📷 Try Live Detection
+      </a>
+    </div>
+  </section>
+
+  <section id="stats">
+    <div class="stats-bg-orb"></div>
+    <div class="section-header">
+      <span class="section-tag">Impact</span>
+      <h2>Numbers That <span class="gradient-text">Matter</span></h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" data-target="285">0</div>
+        <div class="stat-unit">Million</div>
+        <div class="stat-label">Visually impaired people globally</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="98">0</div>
+        <div class="stat-unit">%</div>
+        <div class="stat-label">Object detection accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="30">0</div>
+        <div class="stat-unit">ms</div>
+        <div class="stat-label">Average inference latency</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="80">0</div>
+        <div class="stat-unit">+</div>
+        <div class="stat-label">Object classes detected</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech">
+    <div class="section-header">
+      <span class="section-tag">Stack</span>
+      <h2>Powered by <span class="gradient-text">Cutting-Edge AI</span></h2>
+      <p>A carefully curated stack of state-of-the-art models and frameworks.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-logo">🔮</div>
+        <div class="tech-name">YOLOv8</div>
+        <div class="tech-desc">Object & fall detection</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">👁️</div>
+        <div class="tech-name">OpenCV</div>
+        <div class="tech-desc">Vision processing pipeline</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">🤖</div>
+        <div class="tech-name">SSD MobileNet</div>
+        <div class="tech-desc">Lightweight object detection</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">📝</div>
+        <div class="tech-name">Tesseract OCR</div>
+        <div class="tech-desc">Text extraction & reading</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">🐍</div>
+        <div class="tech-name">Python / Streamlit</div>
+        <div class="tech-desc">Backend & dashboard</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo">🗣️</div>
+        <div class="tech-name">Text-to-Speech</div>
+        <div class="tech-desc">pyttsx3 voice alerts</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-card">
+      <div class="contact-glow"></div>
+      <span class="section-tag">Get Started</span>
+      <h2>Ready to <span class="gradient-text">Experience TRINAY?</span></h2>
+      <p>Join us in making the world more accessible. Try TRINAY today or reach out to learn more about the project.</p>
+      <div class="contact-buttons">
+        <a href="https://github.com" target="_blank" class="btn-primary">⭐ View on GitHub</a>
+        <a href="mailto:info@trinay.ai" class="btn-ghost">✉️ Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="../logo trinay.png" alt="TRINAY" class="footer-logo" />
+        <span>TRINAY</span>
+      </div>
+      <p class="footer-tagline">Empowering vision beyond sight.</p>
+      <p class="footer-copy">© 2026 TRINAY Vision Assist. Built with ❤️ for accessibility.</p>
+    </div>
+  </footer>
+
+  <script>
+    const msg = document.getElementById('msg');
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('password');
+    const actionBtn = document.getElementById('actionBtn');
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabRegister = document.getElementById('tabRegister');
+    const formTitle = document.getElementById('formTitle');
+    const formSubtitle = document.getElementById('formSubtitle');
+    let mode = 'login';
+
+    async function postJson(path, payload) {
+      const res = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      return res.json();
+    }
+
+    function setMode(next) {
+      mode = next;
+      tabSignIn.classList.toggle('active', mode === 'login');
+      tabRegister.classList.toggle('active', mode === 'register');
+      if (mode === 'login') {
+        formTitle.textContent = 'Welcome back';
+        formSubtitle.textContent = 'Sign in to your TRINAY account';
+        actionBtn.textContent = 'Sign In →';
+      } else {
+        formTitle.textContent = 'Create your account';
+        formSubtitle.textContent = 'Join TRINAY to personalize your experience';
+        actionBtn.textContent = 'Create Account →';
+      }
+      msg.textContent = '';
+    }
+
+    async function handleRegister() {
+      msg.textContent = 'Registering...';
+      try {
+        const r = await postJson('/api/register', { email: emailEl.value, password: passEl.value });
+        if (r.ok) {
+          msg.textContent = 'Registered successfully. You can now sign in.';
+          setMode('login');
+        } else {
+          msg.textContent = r.error || 'Registration failed';
+        }
+      } catch (e) {
+        msg.textContent = 'Network error';
+      }
+    }
+
+    async function handleLogin() {
+      msg.textContent = 'Signing in...';
+      try {
+        const r = await postJson('/api/login', { email: emailEl.value, password: passEl.value });
+        if (r.ok) {
+          const accountEmail = emailEl.value.trim();
+          const accountName = accountEmail.split('@', 1)[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, (ch) => ch.toUpperCase());
+          window.localStorage.setItem('trinay_user_email', accountEmail);
+          window.localStorage.setItem('trinay_user_name', accountName || accountEmail);
+          msg.textContent = 'Signed in — redirecting...';
+          const params = new URLSearchParams(window.location.search);
+          const next = params.get('next');
+          const safeNext = next && next.endsWith('.html') ? `/${next.replace(/^\//, '')}` : '/detect.html';
+          window.location.href = safeNext;
+        } else {
+          msg.textContent = r.error || 'Invalid credentials';
+        }
+      } catch (e) {
+        msg.textContent = 'Network error';
+      }
+    }
+
+    actionBtn.addEventListener('click', () => {
+      if (mode === 'register') {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
+    });
+
+    tabSignIn.addEventListener('click', () => setMode('login'));
+    tabRegister.addEventListener('click', () => setMode('register'));
+    setMode('login');
+  </script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

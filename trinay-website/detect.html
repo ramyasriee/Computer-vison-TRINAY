@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRINAY — Live Detection</title>
+  <meta name="description" content="TRINAY live camera object detection with distance estimation and voice alerts for the visually impaired." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="detect.css" />
+</head>
+<body>
+
+  <!-- ── TOP BAR ── -->
+  <header class="top-bar">
+    <div class="logo">
+      <img src="logo trinay.png" alt="TRINAY" />
+      <span>TRINAY</span>
+    </div>
+    <span style="color:var(--muted);font-size:0.82rem;font-weight:500;">Live Detection</span>
+    <span id="user-email" style="margin-left:8px;color:var(--muted);font-size:0.86rem;"></span>
+    <div id="status-dot" class="status-dot" title="Camera status"></div>
+    <button id="logout-btn" class="logout-btn" type="button">Log Out</button>
+    <a href="index.html" class="back-btn">← Back to Site</a>
+  </header>
+
+  <!-- ── PAGE LAYOUT ── -->
+  <div class="page-wrap">
+
+    <!-- ── CAMERA AREA ── -->
+    <div class="camera-area">
+
+      <!-- camera placeholder shown before start -->
+      <div id="camera-placeholder" class="camera-placeholder">
+        <div class="cam-icon">📷</div>
+        <h3 style="color:var(--lavender-lt);font-size:1.1rem;font-weight:700;">Waiting for Live Stream</h3>
+        <p>Start <strong style="color:var(--lavender-lt)">trinay-website/server.py</strong> to connect the webcam and run YOLOv8 object detection here.</p>
+      </div>
+
+      <!-- live MJPEG stream (camera feed + bounding boxes) -->
+      <img id="overlay-canvas" alt="Live object detection stream" />
+
+      <!-- overlay metrics -->
+      <div class="cam-metrics">
+        <div class="cam-metric" id="metric-objects">
+          <span class="label">Objects</span>
+          <span class="val">0</span>
+        </div>
+        <div class="cam-metric" id="metric-closest">
+          <span class="label">Nearest</span>
+          <span class="val">—</span>
+        </div>
+        <div class="cam-metric" id="metric-dist">
+          <span class="label">Distance</span>
+          <span class="val">—</span>
+        </div>
+        <div class="cam-metric" id="metric-alerts">
+          <span class="label">Alerts</span>
+          <span class="val">0</span>
+        </div>
+      </div>
+
+      <!-- danger alert banner -->
+      <div id="alert-banner" class="alert-banner" role="alert" aria-live="assertive">
+        <span class="alert-icon">🚨</span>
+        <span id="alert-text"></span>
+      </div>
+
+    </div><!-- /camera-area -->
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+
+      <!-- START / STOP -->
+      <button id="start-btn" class="btn-start" aria-label="Start or stop camera">
+        <span id="start-btn-icon">📷</span>
+        <span id="start-btn-text">Show Camera</span>
+      </button>
+
+      <div class="account-card">
+        <div class="section-label">Account</div>
+        <div class="account-name" id="account-name">Guest</div>
+        <div class="account-email" id="account-email">Sign in to view your saved session details.</div>
+        <div class="account-summary" id="account-summary">Recent detections will appear here after you use live detection.</div>
+      </div>
+
+      <button id="save-snapshot-btn" class="btn-save" style="margin-top:0.5rem;" type="button">💾 Save Snapshot</button>
+
+      <!-- LIVE STATS -->
+      <div>
+        <div class="section-label">Session Stats</div>
+        <div class="stat-grid" style="margin-top:0.7rem;">
+          <div class="stat-tile">
+            <div class="s-num" id="stat-objects">0</div>
+            <div class="s-lbl">Total Detections</div>
+          </div>
+          <div class="stat-tile">
+            <div class="s-num" id="stat-alerts">0</div>
+            <div class="s-lbl">Voice Alerts</div>
+          </div>
+          <div class="stat-tile" style="grid-column:1/-1;">
+            <div class="s-num" id="stat-fps" style="color:var(--gold);">—</div>
+            <div class="s-lbl">FPS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETECTION SETTINGS -->
+      <div>
+        <div class="section-label">Detection Settings</div>
+        <div class="ctrl-card" style="margin-top:0.7rem;">
+
+          <div class="ctrl-row">
+            <label>Confidence threshold <span id="conf-val">45%</span></label>
+            <input type="range" id="conf-slider" min="0.1" max="0.95" step="0.01" value="0.45" />
+          </div>
+
+          <div class="ctrl-row">
+            <label>Danger distance <span id="dist-val">1.0 m</span></label>
+            <input type="range" id="dist-slider" min="0.3" max="3.0" step="0.1" value="1.0" />
+          </div>
+
+          <div class="toggle-row">
+            <span>Mirror View</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-mirror" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <span>🌐 Environment Mode</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-environment" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="mode-pills" aria-label="Environment presets">
+            <button type="button" id="mode-outdoor" class="mode-pill active">Outdoor</button>
+            <button type="button" id="mode-indoor" class="mode-pill">Indoor</button>
+          </div>
+
+          <div class="toggle-hint">
+            Outdoor mode filters alerts to person, car, bus, traffic light, and dog. Indoor mode filters to chair, couch, bed, dining table, and door.
+          </div>
+
+          <div class="toggle-row">
+            <span>🔊 Voice Alerts</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-voice" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <span>🔔 Proximity Beep</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-beep" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <span>🎧 Spatial Audio</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-spatial" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <span>💡 Ambient Light Warning</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-ambient-light" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-hint">
+            Uses bounding-box area to speed up beeps as detected objects get closer. Spatial audio pans the beep left, center, or right based on the box position. Ambient light warning speaks once when the scene is too dark.
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AI Assist removed: OCR and Scene Summary controls disabled -->
+
+      <!-- LIVE DETECTIONS LIST -->
+      <div>
+        <div class="section-label">Objects in Frame</div>
+        <div id="detect-list" class="detect-list" style="margin-top:0.7rem;"></div>
+      </div>
+
+      <div>
+        <div class="section-label">Recent Objects</div>
+        <div id="recent-objects" class="recent-list" style="margin-top:0.7rem;"></div>
+      </div>
+
+
+
+      <!-- INFO BOX -->
+      <div style="background:rgba(181,123,238,0.07);border:1px solid var(--border);border-radius:12px;padding:0.85rem;font-size:0.78rem;color:var(--muted);line-height:1.6;">
+        <strong style="color:var(--lavender-lt);">How distances work</strong><br/>
+        Distance is estimated from bounding-box width using a focal-length heuristic calibrated for a typical laptop webcam. Accuracy improves for larger objects (person, car). For precise measurements a depth camera is recommended.
+        <br/><br/>
+        <strong style="color:var(--lavender-lt);">How the beep works</strong><br/>
+        Proximity Beep watches the bounding-box area. Bigger boxes mean closer objects, so the beep interval shortens as urgency increases.
+        <br/><br/>
+        <strong style="color:var(--lavender-lt);">How spatial audio works</strong><br/>
+        When enabled, the beep is panned based on the object center X position: left third, center third, or right third of the screen.
+        <br/><br/>
+        <strong style="color:var(--lavender-lt);">How environment mode works</strong><br/>
+        It filters spoken and audio alerts to only the objects you care about, reducing noise and fatigue while walking.
+        <br/><br/>
+        <strong style="color:var(--lavender-lt);">How light warning works</strong><br/>
+        The page samples the live frame brightness and warns when the average intensity falls below a low-light threshold.
+      </div>
+
+    </aside><!-- /sidebar -->
+  </div><!-- /page-wrap -->
+
+  <script src="detect.js"></script>
+</body>
+</html>
